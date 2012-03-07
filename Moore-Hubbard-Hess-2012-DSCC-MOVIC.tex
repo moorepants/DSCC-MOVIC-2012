@@ -19,6 +19,9 @@
 %%% use twocolumn and 10pt options with the asme2e format
 \documentclass[twocolumn,10pt]{asme2e}
 
+\usepackage{amsmath}
+\usepackage{hyperref}
+
 %% The class has several options
 %  onecolumn/twocolumn - format for one or two columns per page
 %  10pt/11pt/12pt - use 10, 11, or 12 point font
@@ -137,7 +140,8 @@ development which has been able to explain many of the more dynamically
 fascinating phenomena from countersteering and stability to speedman's wobble
 and gyroscopic effects \cite{Limebeer2006, Meijaard2007, Meijaard2011}, but the
 amount of experimental validation of these idealized models pales in
-comparison, with there being more motorcycle experimental work than bicycle.
+comparison, with the motorcycle experimentation just outdistancing that with
+bicycles.
 
 The earliest bicycle model validation began at CALSPAN in the late 60's. They
 made use of a rocket to apply know step torques to an uncontrolled riderless
@@ -208,9 +212,53 @@ rate of the front frame about the steer axis was measured with a rate gyro. The
 lateral perturbations delivered by a push/pull rod where measured with a 450
 N load cell.
 
+The raw voltage signals were collected onboard via a data aquistion unit and a
+netbook laptop with a Matlab interface
+\url{http://www.github.com/moorepants/BicycleDAQ}. A processing program,
+\url{http://www.github.com/moorepants/BicycleDataProcessor} was developed to
+create a HDF5 database of all of the signal data and accompanying metadata for
+each run. The software allows for easy querying and also converts the voltage
+singals to the properly scaled engineering units, computes the desired
+quantities for model comparison, and filters and truncates the signals
+depending on the task for selecting the best data for identification purposes.
+
+TODO: Show example plot of processed signals.
+
 \section*{EXPERIMENTS}
-We chose three riders (C, J, L) of similar age (34, 28-29, 32), mass and
-bicycling ability: proficient.
+We collected data with three riders (C, J, L) of similar age (34, 28-29, 32),
+mass (79, 84 , 84 kg), height () and proficiency in bicycling ability for a
+series of N experiments. The data presented herin focuses on four tasks:
+
+\begin{description}
+	\item[Balance]
+		The rider was instructed to simply balance the bicycle and keep a
+		relatively straight heading while focusing their vision at a point in the
+		far distance.
+	\item[Balance With Disturbance]
+		The same instructions were given as in the Balance task except that a
+		lateral force perturbation is applied just under the seat of the bicycle.
+		On the treadmill, we sample for 60 to 90 minutes with five to eleven
+		pertubations per run. On the pavilion floor we were able to apply two to
+		four perturbations per run due to the length of the track. For the majority
+		of the runs, we applied a random sequence of positive and negative
+		perturbations.  On the treadmill, the rider signaled when they felt stable
+		and the perturbation was applied at a random time between 0 and 1 second
+		based on a simple computer program. On the pavilion floor, we simply
+		applied the pertubations as soon as the rider felt stable so that we could
+		get in as many as possible during each run.
+	\item[Track Straight Line]
+		The rider was instructed to focus on a straight line that was marked on the
+		ground and attempt to keep the front wheel on the line. The line of site
+		from the rider's eyes to the line on the ground was esentially tangent the
+		top of the front wheel. In the gymnamsium, the line could be seen up to 30
+		meters ahead, so there was the potential for more perphiral view of the
+		line. On the treadmill, there was from 0.5 to 1.5 meters of preview line
+		available.
+	\item[Track Straight Line With Disturbance]
+		This task was the same as "Track Straight Line" except that a lateral
+		perturbation force is applied to the seat of the bicycle. This was done in
+		the same fashion as described in "Balance With Disturbance".
+\end{description}
 
 We performed the experiments on the treadmill and in a large gymnasium. The
 treadmill is 1 meter wide by 5 meters long and has a speed range from 0.5 m/s
@@ -228,50 +276,145 @@ on a straight section about 30 m long. We were not able to travel at speeds
 higher than about 7 m/s due to the tires slipping in the final turn into the
 test section.
 
-Balance
-   The rider is instructed to simply balance the bicycle and keep a relatively
-   straight heading. They were instructed to focus one some point in the far
-   distance. There was an open door infront of the treadmill which allowed the
-   rider to look to a point outside. In the pavilion, the rider looked into the
-   rafters of the builing or at the furthest wall. We may have given slightly
-   different instructions to the riders and at least one did not understand the
-   instructions exactly during some of the earlier runs, but nonetheless these
-   can be analyzed with a control model that only has the roll and heading
-   loops closed and maybe with only the roll loop closed. We had a line taped
-   to the pavilion floor during these runs that was still in the periphery of
-   the rider's vision. This may have affected their heading control.
-Balance With Disturbance
-   Same as 'Balance' except that a lateral force perturbation is applied just
-   under the seat of the bicycle. On the treadmill, we sample for 60 to 90
-   minutes with five to eleven pertubations per run. On the pavilion floor we
-   were able to apply two to four perturbations per run due to the length of
-   the track. In the early runs (< 204), the lateral force was applied only in
-   the negative direction and the perturber decided when to apply the
-   pertubations. For the later runs, we applied a random sequence of positive
-   and negative perturbations. On the treadmill, the rider signaled when they
-   felt stable and the perturbation was applied at a random time between 0 and
-   1 second based on a simple computer program. On the pavilion floor, we
-   simply applied the pertubations as soon as the rider felt stable so that we
-   could get in as many as possible during each run.
-Track Straight Line
-   The rider was instructed to focus on a straight line that is on the ground
-   and attempt to keep the front wheel on the line. The line of site from the
-   rider's eyes to the the line on the ground was esentially tangent the top of
-   the front wheel. In the pavilion the line could be seen up to 100 feet
-   ahead, so there was a little perphiral view of the line. On the treadmill,
-   there was from 0.5 to 1.5 meters of preview line available.
-Track Straight Line With Disturbance
-   Same as "Track Straight Line" except that a lateral perturbation force is
-   applied to the seat of the bicycle. This was done in the same fashion as
-   described in "Balance With Disturbance".
+\section*{FIRST PRINCIPLE MODELS}
+The passive dynamics of the bicycle rider system can be described with a
+inifinite number of models. The Whipple model \cite{Whipple1899} provides a
+somewhat minimilaistic model capable of capturing the essential dynamics of a
+bicycle/rider system. We use this model as the standard base model to work
+from, as fidelity of simpler models isn't necessarily adequate and this model
+has been benchmarked in \cite{Meijaard2007,Basu-Mandal2007}. The model is 4th
+order with roll angle, steer angle, roll rate and steer rate as the states and
+typically a roll torque and steer torque as the inputs. We neglect the roll
+torque input and extend the model such that a lateral force acting at a point
+on the frame provides as a new input. The second model that we consider adds
+the inertial effects of the rider's arms to better model the system we measured
+as we let the riders move their arms with the front frame of the bicycle. We
+extend the model in a similar fashion as the upright rider in
+\cite{Schwab2012}, except with slightly different joint definitions.
+Constraints are then chosen such that no extra degrees of freedom are added to
+the bicycle/rider model to keep the probelm tractable and easily comparable to
+the benchmarked Whipple model.
+
+We populate the linear model coefficients using measured parameters of the
+bicycel and rider. The bicycle was measured as described in \cite{Moore2010} to
+get accurate estimates of the parameters used in the benchmark bicycle.
+Additional measures for the lateral force application point were also included.
+Each rider's inertial properties were estiamted with Yeadon's method
+\cite{Yeadon1990a} and allowed easy extraction of body segment parameters for
+more comlicated rider biomechanic models such as the inclusion of moving arms
+as described above. The parameter computation is handle with a two custom open
+source software packages written in the Python programming langauge
+\cite{Moore2011a,Dembia2011}.
 
 \section*{MODEL IDENTIFICATION}
-test
+Each run provided a collection of time series that describe the various inputs
+and outputs of the system. For this analysis we limit our inputs to steer
+torque and lateral force and our outputs to roll angle, steer angle, roll rate
+and steer rate. This ideal fourth order system can be described by the
+following continous state space description.
 
-\section*{FIRST PRINCIPLE MODELS}
-Each rider's inertial properties were computed with a custom
-software package \cite{Dembia2011} which implemented Yeadon's method
-\cite{Yeadon1990a}.
+\begin{equation}
+	\begin{split}
+		\dot{x}(t) & =
+		\mathbf{F}x(t) + \mathbf{G}u(t)\\
+		\begin{bmatrix}
+			\dot{\phi} \\
+			\dot{\delta} \\
+			\ddot{\phi} \\
+			\ddot{\delta}
+		\end{bmatrix}
+		& =
+		\begin{bmatrix}
+			0 & 0 & a_{\dot{\phi}\phi} & 0\\
+			0 & 0 & 0 & a_{\dot{\delta}\delta}\\
+			a_{\ddot{\phi}\phi} & a_{\ddot{\phi}\delta} &
+			a_{\ddot{\phi}\dot{\phi}} & a_{\ddot{\phi}\dot{\delta}}\\
+			a_{\ddot{\delta}\phi} & a_{\ddot{\delta}\delta} &
+			a_{\ddot{\delta}\dot{\phi}} & a_{\ddot{\delta}\dot{\delta}}
+		\end{bmatrix}
+		\begin{bmatrix}
+			\phi \\
+			\delta \\
+			\dot{\phi} \\
+			\dot{\delta}
+		\end{bmatrix}
+		+
+		\begin{bmatrix}
+			0 & 0 \\
+			0 & 0\\
+			b_{\ddot{\phi}T_\delta} & b_{\ddot{\phi}F_{c_l}}\\
+			b_{\ddot{\delta}T_\delta} & b_{\ddot{\delta}F_{c_l}}
+		\end{bmatrix}
+		\begin{bmatrix}
+			T_\delta\\
+			F_{c_l}
+		\end{bmatrix}
+	\end{split}
+\end{equation}
+
+\begin{equation}
+	\begin{split}
+		\eta(t) & = \mathbf{H}x(t)\\
+		\begin{bmatrix}
+			\phi \\
+			\delta \\
+			\dot{\phi} \\
+			\dot{\delta}
+		\end{bmatrix}
+		& =
+		\begin{bmatrix}
+			1 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 \\
+			0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 1
+		\end{bmatrix}
+		\begin{bmatrix}
+			\phi \\
+			\delta \\
+			\dot{\phi} \\
+			\dot{\delta}
+		\end{bmatrix}
+	\end{split}
+\end{equation}
+
+Assuming that this model structure can adequately capture the dynamics of
+interest in the bicycle/rider system, our goal is to accurately identify the
+unknown parameters $\theta$ which are made up of all or a subset of the
+unspecified entries in the $\mathbf{F}$ and $\mathbf{G}$ matrices. This
+continous forumaltion is not easily used with noisy discrete data and the
+following difference equation can be assumed if we sameple at $t=kT$,
+$k=1,2,\cdots$ and that the values are constant over the sample period.
+
+\begin{equation}
+	\begin{split}
+		x(kT + T) & = \mathbf{A}(\theta)x(kT) + \mathbf{B}(\theta)u(kT) + w(kT)\\
+		y(kT) & = \mathbf{C}(\theta)x(kT) + v(kT)
+	\end{split}
+\end{equation}
+
+Where $w$ is the process noise and $v$ is the measurment noise, both of which
+are assume to be white with zero mean and known covariances. This can finally
+be transformed by making use of the Kalman filter to get the optimal estimate
+of the states $\hat{x}$
+
+\begin{equation}
+	\begin{split}
+		\hat{x}(kT + T, \theta) & = \mathbf{A}(\theta)\hat{x}(kT) +
+			\mathbf{B}(\theta)u(kT) + \mathbf{K}(\theta)e(kT)\\
+		y(kT) & = \mathbf{C}(\theta)\hat{x}(kT) + e(kT)
+	\end{split}
+\end{equation}
+
+where $\mathbf{K}$ is the Kalman gain matrix which is directly parameterized by
+$\theta$. This equation is called the directly parameterized innovations form
+and will be used in the identification process.
+
+We made use of the Matlab System Idenfication Toolbox for the identifcation of
+the parameters $\theta$ in each run. $\theta$ can formulated to additionaly
+include the continous Kalman entries and the initial states of the system,
+which are also potentially unknowns.
+
+TODO: show a good fit run and a poor fit run
 
 \section*{MODEL COMPARISON}
 test
