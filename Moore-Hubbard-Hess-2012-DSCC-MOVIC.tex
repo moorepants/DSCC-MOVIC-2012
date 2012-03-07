@@ -32,7 +32,7 @@
 
 %% Replace here with information related to your conference
 \confshortname{DSCC 2012}
-\conffullname{ASME 2012 Dynamic Systems and Control Conference}
+\conffullname{2012 ASME Dynamic Systems and Control Conference}
 \confdate{17-19}
 \confmonth{October}
 \confyear{2012}
@@ -43,29 +43,44 @@
 %% by ASME for your paper.
 \papernum{DSCC2008-12345}
 
-\title{DRAFT: AN ARTICLE CREATED USING \LaTeX2\raisebox{-.3ex}{$\epsilon$}\ IN ASME FORMAT}
+\title{System identification of a bicycle under manual control and lateral
+perturbations}
 
-%%% first author
-\author{Harry H. Cheng
+\author{Jason K. Moore\thanks{Address all correspondence to this author.}
     \affiliation{
-    Integration Engineering Laboratory\\
-    Department of Mechanical and Aeronautical Engineering\\
+    Sports Biomechanics Laboratory\\
+    Department of Mechanical and Aerospace Engineering\\
     University of California\\
     Davis, California 95616\\
-    Email: hhcheng@ucdavis.edu
+    Email: jkmoor@ucdavis.edu
     }
 }
 
-%%% second author
-%%% remove the following entry for single author papers
-%%% add more entries for additional authors
-\author{First Coauthor\thanks{Address all correspondence to this author.} \\
-       {\tensfb Second Coauthor}
-    \affiliation{Department or Division Name\\
-    Company or College Name\\
-    City, State (spelled out), Zip Code\\
-    Country (only if not U.S.)\\
-    Email address (if available)
+\author{Mont Hubbard
+    \affiliation{
+    Sports Biomechanics Laboratory\\
+    Department of Mechanical and Aerospace Engineering\\
+    University of California\\
+    Davis, California 95616\\
+    Email: mhubbard@ucdavis.edu
+    }
+}
+
+\author{Ronald Hess
+    \affiliation{
+    Department of Mechanical and Aerospace Engineering\\
+    University of California\\
+    Davis, California 95616\\
+    Email: rahess@ucdavis.edu
+    }
+}
+
+\author{Ronald Hess
+    \affiliation{
+    Department of Mechanical and Aerospace Engineering\\
+    University of California\\
+    Davis, California 95616\\
+    Email: rahess@ucdavis.edu
     }
 }
 
@@ -74,287 +89,201 @@
 
 \maketitle
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-\textit{This article illustrates preparation of ASME paper
-using \LaTeX2\raisebox{-.3ex}{$\epsilon$}. An abstract for
-an ASME paper should be less than 150 words with italic
-typeface.}
+	\textit{We empirically derive a simple fourth order dynamic model of a
+	bicycle. This model is then compared to various basic bicycle models derived
+	from first principles. The empirical model was developed by using a
+	combination of state space system identification techniques and linear
+	regression on a large set of experimental data. The data was collected during
+	a series of experiments on a gymnasium floor and a large treadmill. During
+	the experiments, three rigidified bicycle riders manually controlled the
+	bicycle using only steering control for several tasks: simple balancing, line
+	tracking, and both tasks with measured lateral pulsive perturbations. The
+	bicycle was instrumented to accurately measure the rider’s applied steering
+	torque, all of the essential kinematics of the bicycle’s motion, and the
+	lateral perturbation force. The resulting the rider control actions excited
+	the system in a bandwidth adequate for identifying the linear dynamics of the
+	bicycle with standard state space system identification techniques. A
+	weighted linear regression was used to empirically derive relationships for
+	the state and input matrices from the identified data as a function of speed.
+	The resulting models were compared with several archetypal models using a
+	custom interactive program allowing the comparison of statistically derived
+	models to the first principles models, showing that the simplest bicycle
+	models are not necessarily sufficient for capturing the fundamental dynamics
+	of the vehicle. The roll acceleration was found to be reasonably predicted by
+	the simpler first principles bicycle models, but the steer acceleration was
+	not. A model which includes the inertial effects of the rider’s arms, which
+	more closely modeled reality, improved the steer acceleration and steer
+	torque predictions, but still exhibited some deficiencies. We conclude the
+	paper by exploring the validity of several of the modeling assumptions and
+	potential sources for the error, with a particular focus on the tire to floor
+	interaction.}
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{nomenclature}
-\entry{A}{You may include nomenclature here.}
-\entry{$\alpha$}{There are two arguments for each entry of
-the nomemclature environment, the symbol and the
-definition.}
+	\entry{A}{You may include nomenclature here.}
+	\entry{$\alpha$}{There are two arguments for each entry of
+	the nomenclature environment, the symbol and the
+	definition.}
 \end{nomenclature}
-
-The spacing between abstract and the text heading is two
-line spaces.  The primary text heading is  boldface in all
-capitals, flushed left with the left margin.  The spacing
-between the  text and the heading is also two line spaces.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{INTRODUCTION}
 
-This article illustrates preparation of ASME paper using
-\LaTeX2\raisebox{-.3ex}{$\epsilon$}. The \LaTeX\  macro
-\verb+asme2e.cls+, the {\sc Bib}\TeX\ style file
-\verb+asmems4.bst+, and the template \verb+asme2e.tex+ that
-create this article are available on the WWW  at the URL
-address \verb+http://iel.ucdavis.edu/code/+. To ensure
-compliance with the 2003 ASME MS4 style guidelines
-\cite{asmemanual}, you should modify neither the \LaTeX\
-macro \verb+asme2e.cls+ nor the {\sc Bib}\TeX\ style file
-\verb+asmems4.bst+. By comparing the output generated by
-typesetting this file and the
-\LaTeX2\raisebox{-.3ex}{$\epsilon$} source file, you should
-find everything you need to help you through the
-preparation of ASME paper using
-\LaTeX2\raisebox{-.3ex}{$\epsilon$}. Details on using
-\LaTeX\ can be found in \cite{latex}. Instructions for
-submitting an electronic version of a paper via ftp for
-publication on CD-ROM or online  are given at the URL
-address \verb+http://www.asme.org/pubs/submittal.html+.
+There is a rich history of bicycle and motorcycle mathematical model
+development which has been able to explain many of the more dynamically
+fascinating phenomena from countersteering and stability to speedman's wobble
+and gyroscopic effects \cite{Limebeer2006, Meijaard2007, Meijaard2011}, but the
+amount of experimental validation of these idealized models pales in
+comparison, with there being more motorcycle experimental work than bicycle.
 
+The earliest bicycle model validation began at CALSPAN in the late 60's. They
+made use of a rocket to apply know step torques to an uncontrolled riderless
+bicycle while measuring the roll rate and steer angle of the bicycle. The
+results were compared with computer simulations in a visual manner and basic
+agreement was found. TODO: read over my notes from Roland. David Eaton
+identified a motorcycle with both spectral techniques and basic regression
+techniques in his 1973 dissertation \cite{Eaton1973}. He did experiments with
+an uncontrolled motorcycle with rididfied rider between speeds 6.7 and 20 m/s
+and excited the system with handlebar taps and weight release. He compares Bode
+plots and time simulations of a slight modified version of Sharp's early model
+\cite{Sharp1971} with good prediction of the weave and capsize modes, but he
+concluded that a different tire model was needed to predict the wobble mode. He
+was also able to estimate the motorcycle model from the spectral content of the
+measured steer torque and roll angle while the motorcycle was manually
+controlled by the rider with a bandwidth of 1-4 rad/s. Eaton's methods have been
+repeated several times over the years in various forms.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{VERY VERY VERY VERY VERY VERY VERY VERY LONG HEADING}
+Stephen James \cite{James2002} identified an off road motorcycle which was
+manually excited by the rider using black box ARX methods for a 6th and 7th
+order model with the measured steer torque and the steer angle, roll rate and
+yaw rate. The compared the experimental results with a 10th order motorcycle
+model he developed and claimed good agreement based on visual interpretation of
+the plots. He makes use of the fact that Eaton revealed that the system can be
+excited through a bandwidth with manual control. Biral et al \cite{Biral2003}
+constructed experimental Bode plots of a motorcycle under manual control from
+steer torque and kinematic data during a series of slalom tests which forced
+rider to employ sinusoidal inputs. They were able to get very good agreement
+with their motorcycle model and showed how their model better predicted the
+data than model's with less fidelity. Kooijman \cite{Kooijman2006,
+Kooijman2009} made use of an uncontrolled riderless bicycle's stability and
+excited the weave mode showing good agreement with the eigenvalues of
+linearized Whipple model. His experiments have been repeated by both
+\cite{Stevens2009} and \cite{Escolona2011} with some repeatability, but not
+enough to negate more the need for more experimentation. Chen and Doa
+\cite{Chen2010} make use of a structured black box identification of simulated
+data with noise and were able to basically reproduce the eigenvalues of a
+Whipple model. Doria et al \cite{Doria2012} excited the weave mode of a
+motorcycle at high speed with a handlebar tap by the rider and was able to show
+agreement to their motorcycle model through a phase portrait view.
 
-If the heading should run into more than one line, the run-over is flush left.
+Basic bicycle and motorcycle identification it typically done by exciting the
+vehicle through either perturbations in roll or steer. These experiments can be
+done when the bicycle is under closed loop control and/or when the bicycle is
+stable, the former being require for speeds outside of the stable speed range.
+The mode excitation methods are limiting because the spectrum is limited to the
+frequency band around that mode of motion, making it difficult to identify
+other modes and often limit the identification to less robust techniques.
+Manual excitation under closed loop control allows more of the primary modes to
+be identified in each test. The application of modern system identification
+techniques can help make your models super duper.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection*{Second-Level Heading}
+\section*{MEASUREMENTS}
+We constructed an instrumented bicycle with a wide variety of kinematic and
+kinetic sensors. The bicycle is a heavily modified normal steel bicycle. The
+rider's torso was rigidified with respect to the bicycle frame with the use of
+a torso cast. The rider's legs were fixed to the frame with magnetic knee
+straps and pedaling was not required by adding an electric motor for
+propulsion. The rider's head and arms were able to move, the latter for
+steering control. Great care was taken to measure steer torque as accurately as
+possible. We made use of Futek 150 in-lb single axis torque sensor mounted such
+that it was impossible to apply any forces or moments besides the steer torque.
+The steer angle was measured with a potentiometer. The roll angle was measured
+directly with a lightweight trailer which actuated a potentiometer. The 3
+dimensional angular rates of the bicycle frame and the acceleration of a point
+on the frame were measured with an inertial measurement unit. The body fixed
+rate of the front frame about the steer axis was measured with a rate gyro. The
+lateral perturbations delivered by a push/pull rod where measured with a 450
+N load cell.
 
-The next level of heading is boldface with upper and lower
-case letters. The heading is flushed left with the left
-margin. The spacing to the next heading is two line spaces.
+\section*{EXPERIMENTS}
+We chose three riders (C, J, L) of similar age (34, 28-29, 32), mass and
+bicycling ability: proficient.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection*{Third-Level Heading.}
+We performed the experiments on the treadmill and in a large gymnasium. The
+treadmill is 1 meter wide by 5 meters long and has a speed range from 0.5 m/s
+to 17 m/s. The treadmill surface was made of finely grooved rubber. The
+treadmill was narrow but after some practice we were able to successfully
+perform the lateral perturbations experiments. This provided a very controlled
+environment, in particular with respect to fixed speeds and allowed for very
+long runs durations within a broad speed range.
 
-The third-level of heading follows the style of the
-second-level heading, but it is indented and followed by a
-period, a space, and the start of corresponding text.
+Because all of the bicycle's data collection equipment was on board we were
+able to also perform the experiments on a gymnasium floor. The floor was made
+of a smooth stiff rubber and provided a rectangular wind free space of about 30
+m by 55 m. We road around the perimeter to build up speed and did our maneuvers
+on a straight section about 30 m long. We were not able to travel at speeds
+higher than about 7 m/s due to the tires slipping in the final turn into the
+test section.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{PAPER NUMBER}
+Balance
+   The rider is instructed to simply balance the bicycle and keep a relatively
+   straight heading. They were instructed to focus one some point in the far
+   distance. There was an open door infront of the treadmill which allowed the
+   rider to look to a point outside. In the pavilion, the rider looked into the
+   rafters of the builing or at the furthest wall. We may have given slightly
+   different instructions to the riders and at least one did not understand the
+   instructions exactly during some of the earlier runs, but nonetheless these
+   can be analyzed with a control model that only has the roll and heading
+   loops closed and maybe with only the roll loop closed. We had a line taped
+   to the pavilion floor during these runs that was still in the periphery of
+   the rider's vision. This may have affected their heading control.
+Balance With Disturbance
+   Same as 'Balance' except that a lateral force perturbation is applied just
+   under the seat of the bicycle. On the treadmill, we sample for 60 to 90
+   minutes with five to eleven pertubations per run. On the pavilion floor we
+   were able to apply two to four perturbations per run due to the length of
+   the track. In the early runs (< 204), the lateral force was applied only in
+   the negative direction and the perturber decided when to apply the
+   pertubations. For the later runs, we applied a random sequence of positive
+   and negative perturbations. On the treadmill, the rider signaled when they
+   felt stable and the perturbation was applied at a random time between 0 and
+   1 second based on a simple computer program. On the pavilion floor, we
+   simply applied the pertubations as soon as the rider felt stable so that we
+   could get in as many as possible during each run.
+Track Straight Line
+   The rider was instructed to focus on a straight line that is on the ground
+   and attempt to keep the front wheel on the line. The line of site from the
+   rider's eyes to the the line on the ground was esentially tangent the top of
+   the front wheel. In the pavilion the line could be seen up to 100 feet
+   ahead, so there was a little perphiral view of the line. On the treadmill,
+   there was from 0.5 to 1.5 meters of preview line available.
+Track Straight Line With Disturbance
+   Same as "Track Straight Line" except that a lateral perturbation force is
+   applied to the seat of the bicycle. This was done in the same fashion as
+   described in "Balance With Disturbance".
 
-ASME assigns each accepted paper with a unique number.
-Replace {\bf DSCC2008-12345} in the input file preamble
-(the location will be obvious) with the paper number
-supplied to you by ASME for your paper.
+\section*{MODEL IDENTIFICATION}
+test
 
+\section*{FIRST PRINCIPLE MODELS}
+Each rider's inertial properties were computed with a custom
+software package \cite{Dembia2011} which implemented Yeadon's method
+\cite{Yeadon1990a}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{USE OF SI UNITS}
+\section*{MODEL COMPARISON}
+test
 
-An ASME paper should use SI units.  When preference is
-given to SI units, the U.S. customary units may be given in
-parentheses or omitted. When U.S. customary units are given
-preference, the SI equivalent {\em shall} be provided in
-parentheses or in a supplementary table.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{MATHEMATICS}
-
-Equations should be numbered consecutively beginning with
-(1) to the end of the paper, including any appendices. The
-number should be enclosed in parentheses and set flush
-right in the column on the same line as the equation.  An
-extra line of space should be left above and below a
-displayed equation or formula. \LaTeX\ can automatically
-keep track of equation numbers in the paper and format
-almost any equation imaginable. An example is shown in
-Eq.~(\ref{eq_ASME}). The number of a referenced equation in
-the text should be preceded by Eq.\ unless the reference
-starts a sentence in which case Eq.\ should be expanded to
-Equation.
-
-\begin{equation}
-f(t) = \int_{0_+}^t F(t) dt + \frac{d g(t)}{d t}
-\label{eq_ASME}
-\end{equation}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{FIGURES AND TABLES}
-
-All figures should be positioned at the top of the page
-where possible.  All figures should be numbered
-consecutively and captioned; the caption uses all capital
-letters, and centered under the figure as shown in
-Fig.~\ref{figure_ASME}. All text within the figure should
-be no smaller than 7~pt. There should be a minimum two line
-spaces between figures and text. The number of a referenced
-figure or table in the text should be preceded by Fig.\ or
-Tab.\ respectively unless the reference starts a sentence
-in which case Fig.\ or Tab.\ should be expanded to Figure
-or Table.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
-\begin{figure}[t]
-\begin{center}
-\setlength{\unitlength}{0.012500in}%
-\begin{picture}(115,35)(255,545)
-\thicklines
-\put(255,545){\framebox(115,35){}}
-\put(275,560){Beautiful Figure}
-\end{picture}
-\end{center}
-\caption{THE FIGURE CAPTION USES CAPITAL LETTERS.}
-\label{figure_ASME}
-\end{figure}
-%%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%% begin table   %%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}[t]
-\caption{THE TABLE CAPTION USES CAPITAL LETTERS, TOO.}
-\begin{center}
-\label{table_ASME}
-\begin{tabular}{c l l}
-& & \\ % put some space after the caption
-\hline
-Example & Time & Cost \\
-\hline
-1 & 12.5 & \$1,000 \\
-2 & 24 & \$2,000 \\
-\hline
-\end{tabular}
-\end{center}
-\end{table}
-%%%%%%%%%%%%%%%% end table %%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-All tables should be numbered consecutively and captioned;
-the caption should use all capital letters, and centered
-above the table as shown in Table~\ref{table_ASME}. The
-body of the table should be no smaller than 7 pt.  There
-should be a minimum two line spaces between tables and
-text.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{FOOTNOTES\protect\footnotemark}
-\footnotetext{Examine the input file, asme2e.tex, to see
-how a footnote is given in a head.}
-Footnotes are referenced with superscript numerals and are
-numbered consecutively from 1 to the end of the
-paper\footnote{Avoid footnotes if at all possible.}.
-Footnotes should appear at the bottom of the column in
-which they are referenced.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{CITING REFERENCES}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The ASME reference format is defined in the authors kit
-provided by the ASME.  The format is:
-
-\begin{quotation}
-{\em Text Citation}. Within the text, references should be
-cited in numerical order according to their order of
-appearance.  The numbered reference citation should be
-enclosed in brackets.
-\end{quotation}
-
-The references must appear in the paper in the order that
-they were cited.  In addition, multiple citations (3 or
-more in the same brackets) must appear as a `` [1-3]''.  A
-complete definition of the ASME reference format can be
-found in the  ASME manual \cite{asmemanual}.
-
-The bibliography style required by the ASME is unsorted
-with entries appearing in the order in which the citations
-appear. If that were the only specification, the standard
-{\sc Bib}\TeX\ unsrt bibliography style could be used.
-Unfortunately, the bibliography style required by the ASME
-has additional requirements (last name followed by first
-name, periodical volume in boldface, periodical number
-inside parentheses, etc.) that are not part of the unsrt
-style. Therefore, to get ASME bibliography formatting, you
-must use the \verb+asmems4.bst+ bibliography style file
-with {\sc Bib}\TeX. This file is not part of the standard
-BibTeX distribution so you'll need to place the file
-someplace where LaTeX can find it (one possibility is in
-the same location as the file being typeset).
-
-With \LaTeX/{\sc Bib}\TeX, \LaTeX\ uses the citation format
-set by the class file and writes the citation information
-into the .aux file associated with the \LaTeX\ source. {\sc
-Bib}\TeX\ reads the .aux file and matches the citations to
-the entries in the bibliographic data base file specified
-in the \LaTeX\ source file by the \verb+\bibliography+
-command. {\sc Bib}\TeX\ then writes the bibliography in
-accordance with the rules in the bibliography .bst style
-file to a .bbl file which \LaTeX\ merges with the source
-text.  A good description of the use of {\sc Bib}\TeX\ can
-be found in \cite{latex, goosens} (see how 2 references are
-handled?).  The following is an example of how three or
-more references \cite{latex, asmemanual,  goosens} show up
-using the \verb+asmems4.bst+ bibliography style file in
-conjunction with the \verb+asme2e.cls+ class file. Here are
-some more \cite{art, blt, ibk, icn, ips, mts, mis, pro,
-pts, trt, upd} which can be used to describe almost any
-sort of reference.
-
-
-% Here's where you specify the bibliography style file.
-% The full file name for the bibliography style file
-% used for an ASME paper is asmems4.bst.
-\bibliographystyle{asmems4}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{acknowledgment}
-Thanks go to D. E. Knuth and L. Lamport for developing the
-wonderful word processing software packages \TeX\ and
-\LaTeX. I also would like to thank Ken Sprott, Kirk van
-Katwyk, and Matt Campbell for fixing bugs in the ASME style
-file \verb+asme2e.cls+, and Geoff Shiflett for creating
-ASME bibliography style file \verb+asmems4.bst+.
+	I'd like to thank all of the folks that have helped make these experiments
+	happen. This material is based upon work supported by the National Science
+	Foundation under Grant No. (grantee must enter NSF grant number).
 \end{acknowledgment}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% The bibliography is stored in an external database file
-% in the BibTeX format (file_name.bib).  The bibliography is
-% created by the following command and it will appear in this
-% position in the document. You may, of course, create your
-% own bibliography by using thebibliography environment as in
-%
-% \begin{thebibliography}{12}
-% ...
-% \bibitem{itemreference} D. E. Knudsen.
-% {\em 1966 World Bnus Almanac.}
-% {Permafrost Press, Novosibirsk.}
-% ...
-% \end{thebibliography}
+\bibliographystyle{asmems4}
+\bibliography{bicycle}
 
-% Here's where you specify the bibliography database file.
-% The full file name of the bibliography database for this
-% article is asme2e.bib. The name for your database is up
-% to you.
-\bibliography{asme2e}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\appendix       %%% starting appendix
-\section*{Appendix A: Head of First Appendix}
-Avoid Appendices if possible.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{Appendix B: Head of Second Appendix}
-\subsection*{Subsection head in appendix}
-The equation counter is not reset in an appendix and the
-numbers will follow one continual sequence from the
-beginning of the article to the very end as shown in the
-following example.
-\begin{equation}
-a = b + c.
-\end{equation}
 
 \end{document}
