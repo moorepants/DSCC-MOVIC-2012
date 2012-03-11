@@ -336,23 +336,10 @@ $k=1,2,\cdots$ and that the values are constant over the sample period.
 	\end{split}
 \end{equation}
 
-Where $w$ is the process noise and $v$ is the measurement noise, both of which
-are assume to be white with zero mean and known covariances. This can finally
-be transformed by making use of the Kalman filter to get the optimal estimate
-of the states $\hat{x}$
-
-\begin{equation}
-	\begin{split}
-		\hat{x}(kT + T, \theta) & = \mathbf{A}(\theta)\hat{x}(kT) +
-			\mathbf{B}(\theta)u(kT) + \mathbf{K}(\theta)e(kT)\\
-		y(kT) & = \mathbf{C}(\theta)\hat{x}(kT) + e(kT)
-	\end{split}
-\end{equation}
-
-where $\mathbf{K}$ is the Kalman gain matrix which is directly parameterized by
-$\theta$. This equation is called the directly parameterized innovations form
-and will be used in the identification process. The $\mathbf{A}$ and
-$\mathbf{B}$ matrices are related to $\mathbf{F}$ and $\mathbf{G}$ by
+Where $w$ is the process noise which we assume is zero and $v$ is the
+measurement noise, which is assumed to be white and Gaussian with zero mean and
+known variance. The $\mathbf{A}$ and $\mathbf{B}$ matrices are related to
+$\mathbf{F}$ and $\mathbf{G}$ by
 
 \begin{equation}
 	\begin{split}
@@ -363,18 +350,16 @@ $\mathbf{B}$ matrices are related to $\mathbf{F}$ and $\mathbf{G}$ by
 \end{equation}
 
 We made use of the Matlab System Idenfication Toolbox for the identifcation of
-the parameters $\theta$ in each run. $\theta$ can formulated to additionaly
-include the continous Kalman entries and the initial states of the system,
-which are also potentially unknowns.
+the parameters $\theta$ in each run of this output error model structure.
 
 Figure \ref{fig:exampleFit} shows the example input and output data for a
 single run with both steer torque and lateral force as inputs. Notice that the
-identified model predicts the trajecotry really well and this is the case. The
-Whipple captures the trajectory directions but the magnitudes are large,
-meaning that for a given trajectory, the Whipple model requires less torque
-than what was measured. The Whipple model with the arm inertial effects does a
-better job than the Whipple model, but still has the same issue as the Whipple
-model.
+identified model predicts the trajecotry extremely well and similar results are
+found for the majority of the runs. The Whipple model predicts the trajectory
+directions but the magnitudes are large, meaning that for a given trajectory,
+the Whipple model requires less torque than what was measured. The Whipple
+model with the arm inertial effects does a better job than the Whipple model,
+but still has some magnitude differences.
 
 \begin{figure}
 	\includegraphics{figures/example-fit.pdf}
@@ -417,7 +402,9 @@ explains the amplitude differences in the trajectories shown in
 \begin{figure*}
 	\includegraphics{figures/coefficients.pdf}
 	\caption{The coefficients of the linear dynamical equations of motion plotted
-	as a function of speed. Each blue dot is a single experiment.}
+	as a function of speed. Each blue dot is a single experiment. The green line
+	is the Whipple model and the magenta line is the Arm model. Only experiments
+	with a mean fit percentage greater than zero are shown.}
 	\label{fig:coefficients}
 \end{figure*}
 
@@ -436,14 +423,17 @@ We have shown that a fourth order structured state space model is adequate for
 describing the motion of the bicycle under manual control in a speed range from
 approximately 1.5 m/s to 9 m/s. The fact that higher order models may not be
 necessary for bicycle dynamic description is an important finding, but the
-data subsequently reveals that archetypical first principles models are not
-robust enough to fully describe the dynamics This emprically derived model shows 
+data subsequently reveals that archetypal first principles models are not
+robust enough to fully describe the dynamics. The difficenices are most
+probably due to the knife edge, no side slip assumptions made in the two
+models. We found thatthe uncertaintiy in our model physical parameter estimates
+were not large enough to cause the models to better predict the data. It is
+more likely that a tire scrub torques of some sort are needed to improve the
+fidelity.
 
 \begin{acknowledgment}
-	I'd like to thank all of the folks that have helped make these experiments
-	happen, there are a lot and also everyone who has helped me develop the
-	underlying theory. This material is based upon work supported by the National
-	Science Foundation under Grant No. (grantee must enter NSF grant number).
+	This material is based upon work supported by the National Science Foundation
+	under Grant No 0928339.
 \end{acknowledgment}
 
 \bibliographystyle{asmems4}
