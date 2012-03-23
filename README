@@ -1,0 +1,21 @@
+This is raw text and code for producing the plots for the DSCC/MOVIC 2012
+conference.
+
+The plots are produced explicity with the following software:
+
+- NumPy 1.6.1
+- SciPy 0.10.0
+- matplotlib 1.0.1
+- BicycleID debd089142e0d9e1bc2c448bbcfdab4060c08dc4
+  https://github.com/moorepants/BicycleID
+- DynamicistToolKit 44eedbc4624e28d93e0bcf75fbce43041da5e1cd
+  https://github.com/moorepants/DynamicistToolKit
+- Matlab: 7.10.0.499 (R2010a)
+
+The data was generated using:
+
+- BicycleDataProcessor (processed run data)
+- BicycleSystemID (script to identify the models for each run)
+
+The arm model data was generated manually from source code in my dissertation
+(https://github.com/moorepants/dissertation).

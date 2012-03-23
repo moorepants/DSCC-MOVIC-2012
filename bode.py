@@ -1,6 +1,6 @@
 from numpy import logspace, sqrt, array, zeros, log10, rad2deg
 from matplotlib import rcParams
-from bicycleid import data, plot, model # version debd089142e0d9e1bc2c448bbcfdab4060c08dc4
+from bicycleid import data, plot, model
 from dtk import control
 
 params = {'axes.labelsize': 8,
