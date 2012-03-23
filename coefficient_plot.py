@@ -1,7 +1,7 @@
 from numpy import linspace, sqrt, zeros
 from scipy.io import loadmat
 from matplotlib import rcParams
-from bicycleid import data, plot, model
+from bicycleid import data, plot, model # version debd089142e0d9e1bc2c448bbcfdab4060c08dc4
 
 params = {'axes.labelsize': 10,
           'text.fontsize': 10,
