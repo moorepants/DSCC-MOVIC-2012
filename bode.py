@@ -29,6 +29,10 @@ bodePlot = plot.BodePlot(w)
 bodeData = dat.subset_bode(**subDef)
 bodePlot.update_graph(bodeData, models)
 
+# this is the Whipple model line
+bodePlot.bode.figs[0].axes[0].lines[3].set_color('g')
+bodePlot.bode.figs[0].axes[1].lines[3].set_color('g')
+
 # arm model at the mean speed for this run
 
 A = array([[0.0, 0.0, 1.0, 0.0],
@@ -45,11 +49,23 @@ D = zeros((1, 1))
 sys = control.StateSpace(A, B, C, D)
 mag, phase = bodePlot.bode.mag_phase_system(sys)
 
+# arm model lines
+# mag
 bodePlot.bode.figs[0].axes[0].lines[4].set_ydata(20 * log10(mag[:, 0, 0]))
+bodePlot.bode.figs[0].axes[0].lines[4].set_color('r')
+# phase
 bodePlot.bode.figs[0].axes[1].lines[4].set_ydata(rad2deg(phase[:, 0, 0]))
+bodePlot.bode.figs[0].axes[1].lines[4].set_color('r')
 
 bodePlot.bode.figs[0].axes[0].set_ylim((-120, 0))
 bodePlot.bode.figs[0].axes[1].set_ylim((-250, 0))
+
+# move the y axis labels
+x, y = bodePlot.bode.figs[0].axes[0].yaxis.get_label().get_position()
+bodePlot.bode.figs[0].axes[0].yaxis.set_label_coords(x - 0.1, y)
+
+x, y = bodePlot.bode.figs[0].axes[1].yaxis.get_label().get_position()
+bodePlot.bode.figs[0].axes[1].yaxis.set_label_coords(x - 0.1, y)
 
 goldenRatio = (1 + sqrt(5.)) / 2.
 columnWidthPt = 257.28102

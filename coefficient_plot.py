@@ -45,10 +45,11 @@ for i, B in enumerate(m['inputMatrices']):
 for lab, ax in coefPlot.axes.items():
     row, col = int(lab[-2]), int(lab[-1])
     if lab[0] == 'a':
-        ax.plot(m['speed'], stateMats[:, row - 1, col - 1])
+        ax.plot(m['speed'], stateMats[:, row - 1, col - 1], 'r')
     elif lab[0] == 'b':
-        ax.plot(m['speed'], inputMats[:, row - 1, col - 1])
+        ax.plot(m['speed'], inputMats[:, row - 1, col - 1], 'r')
 
+coefPlot.title.set_fontsize(10.0)
 coefPlot.figure.set_figwidth(7.5)
 goldenRatio = (sqrt(5)-1.0)/2.0
 coefPlot.figure.set_figheight(7.5 * goldenRatio)

@@ -25,10 +25,6 @@ armModel.B = [0, 0
 pemArgs = {'Maxiter', 100, ...
            'SearchMethod', 'auto', ...
            'Focus', 'Prediction', ...
-           'Weighting', [0.75, 0, 0, 0;
-                         0, 1, 0, 0;
-                         0, 0, 1, 0;
-                         0, 0, 0, 1], ...
            'DisturbanceModel', 'none', ...
            'InitialState', 'zero', ...
            'Display', 'on', ...
@@ -36,7 +32,7 @@ pemArgs = {'Maxiter', 100, ...
 
 identifiedModel = pem(data, whippleModel, pemArgs{:});
 
-[YH, FIT, X0] = compare(data, whippleModel, armModel, identifiedModel);
+[YH, FIT, X0] = compare(data, identifiedModel, whippleModel, armModel);
 
 time = data.SamplingInstants;
 
@@ -54,19 +50,19 @@ set(gcf, ...
     'PaperPosition', [0, 0, figWidth, figHeight], ...
     'PaperSize', [figWidth, figHeight])
 
-axesHandles = tight_subplot(6, 1, [0.05, 0.0], [0.1, 0.01], [0.15, 0.05]);
+axesHandles = tight_subplot(6, 1, [0.05, 0.0], [0.1, 0.01], [0.17, 0.05]);
 
 ax = axesHandles(1);
 lh = plot(ax, time, data.InputData(:, 1), 'k');
 ylabel(ax, '\(T_\delta\) [N-m]', 'Interpreter', 'Latex')
 xlim(ax, [0, 12])
-set(ax, 'XTick', [])
+%set(ax, 'XTick', [])
 
 ax = axesHandles(2);
 lh = plot(ax, time, data.InputData(:, 2), 'k');
 ylabel(ax, '\(F_{c_l}\) [N]', 'Interpreter', 'Latex')
 xlim(ax, [0, 12])
-set(ax, 'XTick', [])
+%set(ax, 'XTick', [])
 
 ylabels = {'\(\phi\) [rad]', '\(\delta\) [rad]',
            '$\dot{\phi}$ [rad/s]', '$\dot{\delta}$ [rad/s]'};
@@ -80,10 +76,10 @@ for i = 1:4
               time, YH{2}.OutputData(:, i), 'g', ...
               time, YH{3}.OutputData(:, i), 'r');
     ylabel(ax, ylabels{i}, 'Interpreter', 'Latex')
-    whipLeg = sprintf('W %1.0f%%', f(1, i));
-    armLeg = sprintf('A %1.0f%%', f(2, i));
-    idLeg = sprintf('I %1.0f%%', f(3, i));
-    leg = legend(ax, 'M', whipLeg, armLeg, idLeg);
+    idLeg = sprintf('I %1.0f%%', f(1, i));
+    whipLeg = sprintf('W %1.0f%%', f(2, i));
+    armLeg = sprintf('A %1.0f%%', f(3, i));
+    leg = legend(ax, 'M', idLeg, whipLeg, armLeg);
     %pos = get(leg, 'Position');
     %set(leg, 'Position', pos + [0, 0, 0, 0])
     set(leg, 'FontSize', 5)
@@ -95,9 +91,9 @@ for i = 1:4
         set(legLines(i), 'XData', [lim(1), lim(2) / 3])
     end
     xlim(ax, [0, 12])
-    if i ~= 4
-        set(ax, 'XTick', [])
-    end
+    %if i ~= 4
+        %set(ax, 'XTick', [])
+    %end
 end
 
 % add the the time axis to the last bottom plot
