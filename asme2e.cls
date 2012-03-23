@@ -1,12 +1,19 @@
 % ASME DOCUMENT CLASS - asme2e.cls
-%   for LaTeX version 2e - 2/14/01
+% 	for LaTeX version 2e - 2/14/10
 %
 % WARNING: This is an unauthorized class file. It has not been thoroughly
-% tested so it probably still has bugs. I'll do my best to fix them when 
+% tested so it probably still has bugs. We will do our best to fix them when 
 % found.
 %
 % ---------------------------------------------------------------------------
 %   filename:      asme2e.cls
+%   version 1.6, Jan 11, 2010. 
+%        (1) Greek letters in math mode are italicized.
+%        (2) Figure captions are in uppercase bold sans serif font of 9 points.
+%        (3) The defined commands \hour \minute conflict with the commands 
+%              \hour and minute in the approved package SIunits.  
+%              They were changed to \thour and \tminute.
+%             --- Marc LaViolette <laviolette-m@rmc.ca>
 %   version 1.4, May 12, 2005. 
 %        (1) Modified asme2e.cls to support pdflatex  
 %        (2) Modified asme2e.cls to support multiple lines in conference name.
@@ -15,19 +22,19 @@
 %   date:          6/29/01
 %   ported by:     Kenneth Sprott
 %   address:       Department of Mechanical Engineering
-%          University of California, Davis
-%          Davis, California 95616
+%		   University of California, Davis
+%		   Davis, California 95616
 %   e-mail:        kssprott@ucdavis.edu
 %   description:   This is a new version of the asme2e class file v1.0.
-%          New features in this file include:
-%          1. Eliminating the pifont package from the file.
-%             It was not required and had caused some problems.
-%          2. Fixed the font size definitions.  It is now possible
-%             to use 10, 11, and 12pt font.  The old size definition
-%             was incorrect and the default 12pt was actually 10pt.
-%             The default is now 10pt.
-%          3. Add support for the new reference format required by
-%             ASME. This requires the use of Bibtex.
+%		   New features in this file include:
+%		   1. Eliminating the pifont package from the file.
+%		      It was not required and had caused some problems.
+%		   2. Fixed the font size definitions.  It is now possible
+%		      to use 10, 11, and 12pt font.  The old size definition
+%		      was incorrect and the default 12pt was actually 10pt.
+%		      The default is now 10pt.
+%		   3. Add support for the new reference format required by
+%		      ASME. This requires the use of Bibtex.
 %                  4. Eliminate the subfigure code held over from the original 
 %                     ASME style file. Usepackage subfigure instead.
 %                  5. Add cleanhead option to eliminate the banner on the title
@@ -42,7 +49,7 @@
 
 \RequirePackage{ifthen}
 \RequirePackage{times}      % Loads the Times-Roman Fonts
-\RequirePackage{mathptm}    % Loads the Times-Roman Math Fonts
+\RequirePackage{mathptmx}    % Loads the Times-Roman Math Fonts
 \RequirePackage{ifpdf}      % Needed to pick between latex and pdflatex
 
 \newboolean{@titlepage}
@@ -75,8 +82,8 @@
   January\or February\or March\or April\or May\or June\or
   July\or August\or September\or October\or November\or December\fi
   \space\number\day, \number\year}
-\newcommand\currenttime{\minute\time\hour\minute\divide\hour60
-\the\hour:\multiply\hour60\advance\minute-\hour\the\minute}
+\newcommand\currenttime{\tminute\time\thour\tminute\divide\thour60
+\the\thour:\multiply\thour60\advance\tminute-\thour\the\tminute}
 
 
 
@@ -329,38 +336,33 @@
 %                 Page Layout
 % -----------------------------------------------------------
 
-\setlength{\voffset}{0pt}
-\setlength{\hoffset}{0pt}
 \setlength{\paperheight}{11in}
 \setlength{\paperwidth}{8.5in}
-\setlength{\oddsidemargin}{-36pt}
-\setlength{\evensidemargin}{-36pt}
+\setlength{\oddsidemargin}{48pt}
+\setlength{\evensidemargin}{48pt}
 % Added by Matt Campbell to make compatible with pdflatex 3/8/2005
-%\ifpdf%
-%   \setlength{\topmargin}{1.3in}% use 1.3in top margin for pdflatex
-%\else
-%   \setlength{\topmargin}{2.0in}% use 2.0in top marging for latex - same as original
-%   \setlength{\topmargin}{72pt}% use 2.0in top marging for latex - same as original
-%\fi
-\setlength{\topmargin}{1pt}% original line 
+\ifpdf%
+   \setlength{\topmargin}{1.3in}% use 1.3in top margin for pdflatex
+\else
+   \setlength{\topmargin}{2.0in}% use 2.0in top marging for latex - same as original
+\fi
+%\setlength{\topmargin}{2.0in}% original line 
 % End pdflatex section
 \setlength{\marginparwidth}{0pt}
-\setlength{\marginparsep}{0pt}
+\setlength{\marginparsep}{11pt}
 \setlength{\marginparpush}{5pt}
-\setlength{\columnsep}{.38in}
+\setlength{\columnsep}{.375in}
 \setlength{\columnseprule}{0pt}
-\setlength{\headheight}{0pt}
-\setlength{\headsep}{0pt}
-\setlength{\topskip}{1pt}
-\setlength{\footskip}{0pt}
-\setlength{\textheight}{647pt}
-%\setlength{\textheight}{708pt}
-%\advance\textheight by -\headheight
-%\advance\textheight by -\headsep
+\setlength{\headheight}{10pt}
+\setlength{\headsep}{18pt}
+\setlength{\topskip}{10pt}
+\setlength{\footskip}{24pt}
+\setlength{\textheight}{9.00in}
+\advance\textheight by -\headheight
+\advance\textheight by -\headsep
 \setlength{\textwidth}{7.5in}
-\setlength{\footnotesep}{0pt}
-%\setlength{\skip\footins}{9pt plus 4pt minus 2pt}
-\setlength{\skip\footins}{6pt}
+\setlength{\footnotesep}{6.65pt}
+\setlength{\skip\footins}{9pt plus4pt minus 2pt}
 \setlength{\floatsep}{18pt plus2pt minus2pt}
 \setlength{\textfloatsep}{20pt plus4pt minus2pt}
 \setlength{\intextsep}{24pt plus4pt minus2pt}
@@ -482,9 +484,9 @@
 \setlength\tabbingsep{\labelsep}
 
 \renewcommand{\footnoterule}{    % This modifies the default footnote style
-     \kern2\p@
+     \kern12\p@
      \hrule width.5in height.25pt
-     \kern2\p@}
+     \kern10\p@}
 
 \long\def\@makefntext#1{\parindent 1em\noindent
     \hbox to1.8em{\hss$\m@th^{\@thefnmark}$}#1}
@@ -709,7 +711,7 @@
 \def\fps@figure{tbp}
 \def\ftype@figure{1}
 \def\ext@figure{lof}
-\def\fnum@figure{\figurename~\thefigure}
+\def\fnum@figure{\small\textbf{\textsf{\MakeUppercase{\figurename~\thefigure}}}}
 \newenvironment{figure}
                {\@float{figure}}
                {\end@float}
@@ -721,7 +723,7 @@
 \def\fps@table{tbp}
 \def\ftype@table{2}
 \def\ext@table{lot}
-\def\fnum@table{\tablename~\thetable}
+\def\fnum@table{\small\textbf{\textsf{\MakeUppercase{\tablename~\thetable}}}}
 \newenvironment{table}{%
             \small
             \renewcommand{\arraystretch}{1.5}
@@ -833,19 +835,17 @@
   \null\vspace*{-26pt}             % Took out ASMElogo provision
    \vbox{\hbox to \textwidth{\begin{tabular}{@{}c@{\hskip3pc}}
    \hbox to 46pt{\vbox to 46pt{\vss\hsize46pt\vss}}\end{tabular}\hss
-   \vbox{\hsize37pc\scriptsize\sf\vskip\baselineskip%
+  \vbox{\hsize37pc\scriptsize\sf\vskip\baselineskip%
   \bannerfnt\begin{flushright}% added flushright to properly wrap long conference names
-%  \hfill Proceedings of \@confshortname\par
-%  \hfill \@conffullname\par 
-%  \hfill \@confmonth\ \@confdate, \@confyear, \@confcity, \@confcountry
+  \hfill Proceedings of \@conffullname\par
+  \hfill \@confshortname\par
+  \hfill \@confmonth\ \@confdate, \@confyear, \@confcity, \@confcountry
 
   \vskip.5in
-  \hfill {}\end{flushright}}
+  \hfill {\pnumfnt\@papernum}\end{flushright}}
   \hskip1pc}}
-%  \hfill {\pnumfnt\@papernum}\end{flushright}}
-%  \hskip1pc}}
-  \vskip 0.48in%.25in original value w/out flushright
-  \vskip .25in{\large\twlsfb
+  \vskip.15in%.25in original value w/out flushright
+  \vskip .25pc{\large\twlsfb
                \begin{center}\leftskip.5in plus1fill\rightskip\leftskip
                \@title\par\end{center}}
   \vskip2pc{\begin{center}\@author\par\end{center}}\vskip12pt}
@@ -1286,12 +1286,10 @@
 \else
  \def\ps@myheadings{%
      \let\@mkboth\@gobbletwo
-     \def\@oddfoot{}%
-     \def\@evenfoot{}%
-%     \def\@oddfoot{\hskip1.55in\hfil\thepage\hfil Copyright\ \ \copyright\ \@confyear%
-%    ~by ASME}%
-%     \def\@evenfoot{\hskip1.55in\hfil\thepage\hfil Copyright\ \ \copyright\ \@confyear%
-%    ~by ASME}%
+     \def\@oddfoot{\hskip1.55in\hfil\thepage\hfil Copyright\ \ \copyright\ \@confyear%
+    ~by ASME}%
+     \def\@evenfoot{\hskip1.55in\hfil\thepage\hfil Copyright\ \ \copyright\ \@confyear%
+    ~by ASME}%
 
     \let\@oddhead\@empty
     \let\@evenhead\@empty
@@ -1299,15 +1297,12 @@
     \def\subsectionmark##1{}
     }
 \def\ps@plain{\let\@mkboth\@gobbletwo
-     \def\@oddhead{}%
-     \def\@oddfoot{}%
+     \def\@oddhead{$\smash{\raise72pt\hbox%
+                  {}}$\hfill}%
+                  %{\scriptsize\today\qquad\currenttime}}$\hfill}%
+     \def\@oddfoot{\reset@font\rm\hskip1.55in\hfil\thepage%
+     \hfil Copyright\ \ \copyright\ \@confyear\ by ASME}%
      \let\@evenhead\@oddhead\let\@evenfoot\@oddfoot}
-%     \def\@oddhead{$\smash{\raise72pt\hbox%
-%                  {}}$\hfill}%
-%                  %{\scriptsize\today\qquad\currenttime}}$\hfill}%
-%     \def\@oddfoot{\reset@font\rm\hskip1.55in\hfil\thepage%
-%     \hfil Copyright\ \ \copyright\ \@confyear\ by ASME}%
-%     \let\@evenhead\@oddhead\let\@evenfoot\@oddfoot}
 
 \fi
 
@@ -1332,28 +1327,25 @@
 
 
 \mark{{}{}}
-\def\ps@plain{\let\@mkboth\@gobbletwo
-     \def\@oddhead{}%
-     \def\@oddfoot{}%
-     \let\@evenhead\@oddhead\let\@evenfoot\@oddfoot}
+%\def\ps@plain{\let\@mkboth\@gobbletwo
 %     \def\@oddhead{$\smash{\raise72pt\hbox%
 %                  {\scriptsize\today\qquad\currenttime}}$\hfill}%
 %     \def\@oddfoot{\reset@font\rm\hskip1.55in\hfil\thepage%
 %     \hfil Copyright\ \ \copyright\ \confyear\ by ASME}%
 %     \let\@evenhead\@oddhead\let\@evenfoot\@oddfoot}
 
-\newcount\minute\newcount\hour
-\def\currenttime{\minute\time\hour\minute\divide\hour60
-\the\hour:\multiply\hour60\advance\minute-\hour\the\minute}
+\newcount\tminute\newcount\thour
+\def\currenttime{t\minute\time\thour\tminute\divide\thour60
+\the\thour:\multiply\thour60\advance\tminute-\thour\the\tminute}
 
 \markboth{}{}
 \ps@myheadings
 \pagenumbering{arabic}
 \if@twocolumn\twocolumn\sloppy\flushbottom\else\onecolumn\fi
-%\advance\hoffset-7pc
-%\advance\voffset-10pc
-
-
+\advance\hoffset-7pc
+\advance\voffset-10pc
+%
+%
 \endinput
 
 % End of Class
