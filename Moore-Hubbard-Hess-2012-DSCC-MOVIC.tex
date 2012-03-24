@@ -49,7 +49,7 @@ lateral perturbations}
     Department of Mechanical and Aerospace Engineering\\
     University of California\\
     Davis, California 95616\\
-    Email: jkmoor@ucdavis.edu
+		Email: {jkmoor@ucdavis.edu, mhubbard@ucdavis.edu, rahess@ucdavis.edu}
     }
 }
 
@@ -71,120 +71,120 @@ lateral perturbations}
 	tracking and lateral deviation tracking. Both tasks where performed with and
 	without measured lateral pulsive perturbations. The bicycle was instrumented
 	to accurately measure the all of the essential kinematics and kinetics
-	involved. The resulting the rider control actions excited the system in a
+	involved. The resulting rider control actions excited the system across a
 	bandwidth adequate for identifying the linear dynamics of the system. The
-	resulting models are compared with several archetypal first principal models
+	resulting models are compared with several archetypal first principle models
 	showing that the simplest bicycle models are not necessarily sufficient for
 	capturing the fundamental dynamics of the vehicle. The roll acceleration
 	equation was found to be reasonably predicted by the simpler first principle
 	bicycle models, but the steer acceleration equation was not. A model which
-	includes the inertial effects of the rider’s arms, which more closely modeled
+	includes the inertial effects of the rider’s arms, which more closely model
 	reality, improved the model predictions, but still lacked full fidelity. We
 	conclude the paper by exploring the validity of several of the modeling
 	assumptions and potential sources for the prediction error.}
 \end{abstract}
-
+%
 \section*{INTRODUCTION}
-
 There is a rich history of bicycle and motorcycle mathematical model
-development which has been able to explain many of the more dynamically
+development. This has been able to explain many of the more dynamically
 fascinating phenomena from countersteering and stability to speedman's wobble
-and gyroscopic effects, see \cite{Limebeer2006, Meijaard2007} for historical
-overviews, but the amount of experimental validation of these idealized models
-pales in comparison, with the motorcycle experimentation just outdistancing
+and gyroscopic effects (see \cite{Limebeer2006, Meijaard2007} for historical
+overviews). But the amount of experimental validation of these idealized models
+pales in comparison with the motorcycle experimentation outdistancing
 that done with bicycles.
 
 The earliest comprehensive bicycle model validation began at CALSPAN in the
-late 60's \cite{Roland1971}. They had several revolutionary studies, one in
-which they made use of a rocket to apply know step torques to an uncontrolled
-riderless bicycle and simulations of slalom maneuvers which was visually
-compared with video footage the maneuvers. Little more was done done until more
-recently. Kooijman \cite{Kooijman2006, Kooijman2009} made use of an
-uncontrolled riderless bicycle's stability and excited the weave mode showing
-good agreement with the eigenvalues of linearized Whipple model. Lastly, on the
-theoretical side, Chen and Doa \cite{Chen2010} make use of a structured black
-box identification of simulated noisy data and were able to basically reproduce
-the eigenvalues of a Whipple model from simulated data.
+late 60's \cite{Roland1971}. This included several revolutionary studies, in
+one of which they made use of a rocket to apply know step torques to an
+uncontrolled riderless bicycle. In another, simulations of slalom maneuvers
+were visually compared with video footage. Very little work on the topic was
+done until more recently. Kooijman \cite{Kooijman2006, Kooijman2009} made use
+of an uncontrolled riderless bicycle's stability and excited the weave mode
+showing good agreement with the eigenvalues of the linearized Whipple model
+\cite{Whipple1899}. Lastly, on the theoretical side, Chen and Doa
+\cite{Chen2010} make use of a structured black box identification of simulated
+noisy data and were able to basically reproduce the eigenvalues of a Whipple
+model.
 
 In terms of motorcycle model validation, David Eaton's dissertation work in
-particular stands out. He identified a motorcycle with both spectral techniques
-and basic regression techniques in his 1973 dissertation \cite{Eaton1973}. He
-did experiments with an uncontrolled motorcycle with rigidified rider and
-excited the system by tapping the handlebars and releasing weights for a change
-in roll torque. He showed good prediction of the weave and capsize modes.  He
-was also able to estimate the motorcycle model from the spectral content of the
-measured steer torque and roll angle while the motorcycle was manually
-controlled. Eaton's methods in many ways laid the groundwork for many
-subsequent studies by other researchers, including this one.
+particular stands out. He identified a motorcycle using both spectral and basic
+regression techniques in his 1973 dissertation \cite{Eaton1973}. He conducted
+experiments with an uncontrolled motorcycle with rigidified rider and excited
+the system by tapping the handlebars and releasing weights for a change in roll
+torque. He showed good prediction of the weave and capsize modes.  He was also
+able to estimate the frequency response of the motorcycle model from the
+spectral content of the measured steer torque and roll angle while the
+motorcycle was manually controlled. Eaton's methods in many ways laid the
+groundwork for many subsequent studies by other researchers, including this
+one.
 
 Stephen James \cite{James2002} identified an off-road motorcycle which was
 manually excited by the rider by using black box ARX methods. He compared the
-experimental results with a first principle motorcycle model he developed and
-claimed good agreement based on visual interpretation of the root loci plots.
+experimental results with a first principles motorcycle model he developed and
+claimed good agreement based on visual interpretation of the root locus plots.
 Biral et al. \cite{Biral2003} constructed empirical Bode plots of a motorcycle
 under manual control from steer torque and kinematic data during a series of
 slalom tests. They were able to get very good agreement with their motorcycle
 model. Doria et al. \cite{Doria2012} excited the weave mode of a motorcycle at
-high speed with a handlebar tap by the rider and was able to show agreement to
-their predictions through a phase portrait view.
+high speed with a handlebar tap by the rider and was able to show agreement
+with their predictions through a phase portrait view.
 
-Basic bicycle and motorcycle identification is typically done by exciting the
-vehicle through either perturbations in roll or steer. These experiments can be
-done when the bicycle is under closed loop control or when the bicycle is
-stable, the later being a requirement for speeds outside of the stable speed
-range. But, the mode excitation methods are limited to the frequency band
-around that mode of motion. Manual excitation under closed loop control gives
-better excitation bandwidth and a pairing with modern system identification
-techniques can provide richer models.
-
+Basic bicycle and motorcycle identification is typically done on data collected
+by exciting the vehicle through either perturbations in roll or steer. These
+experiments can be done when the bicycle is under closed loop control or when
+the bicycle is stable, the former being a requirement for speeds outside of the
+stable speed range. But, the mode excitation methods are limited to the
+frequency band around that mode of motion. Manual excitation under closed loop
+control gives better excitation bandwidth and a pairing with modern system
+identification techniques can provide richer models.
+%
 \section*{MEASUREMENTS}
 We constructed an instrumented bicycle with a wide variety of kinematic and
 kinetic sensors. The rider's torso was rigidified with respect to the bicycle
 frame with the use of a torso cast. The rider's legs were fixed to the frame
-with magnetic knee straps and an electric motor provided steady propulsion. The
-rider's head and arms were able to move, the latter for steering control. Great
-care was taken to measure steer torque as accurately as possible. We made use
-of a 17 N-m single axis torque sensor mounted such that it was impossible to
-apply any forces or moments besides the steer torque. The steer angle and roll
-angle were measured with potentiometers, the later through the roll rotation of
-a lightweight trailer. The angular rates of the bicycle frame and the
-acceleration of a point on the frame were measured with an inertial measurement
-unit. The body fixed rate of the front frame about the steer axis was measured
-with a rate gyro. The lateral perturbations were delivered by a push/pull rod
-with a 450 N load cell.
+with magnetic knee straps and an electric motor provided steady propulsion
+obviating the need to pedal. The rider's head and arms were able to move, the
+latter for steering control. Great care was taken to measure steer torque as
+accurately as possible. We used a 17 N-m single axis torque sensor mounted so
+that it only measured a pure torque about the steer axis. Steer and roll angles
+were measured with potentiometers, the later through the roll rotation of a
+lightweight trailer. Angular rates of the bicycle frame and the acceleration of
+a point on the frame were measured with an inertial measurement unit. The body
+fixed rate of the front frame about the steer axis direction was measured with
+a rate gyro. Lateral perturbations were delivered by a push/pull rod with a 450
+N load cell.
 
-The raw voltage signals were collected on-board via a data acquisition unit and
-a netbook laptop with a Matlab interface. A processing program, was developed
-to create and manage an HDF5 database of all of the signal data (700+ runs) and
+Raw voltage signals were collected on-board via a data acquisition unit and a
+netbook laptop with a Matlab interface. A processing program was developed to
+create and manage an HDF5 database of all of the signal data (700+ runs) and
 accompanying metadata for each run. The software allows for easy querying,
 converts raw voltage signals to the properly scaled engineering units, computes
 the desired quantities for model comparison, and filters and truncates the
 signals depending on the task for selecting the best data for identification
-purposes. The black line in Figure \ref{fig:exampleFit} shows an example of
-the processed experimental data for one run.
-
+purposes. The black line in Figure \ref{fig:exampleFit} shows an example of the
+processed experimental data for one run.
+%
 \begin{figure}
 	\includegraphics{figures/example-fit.pdf}
-	\caption{The example results for the identification of a single run. The
-	experimentally measured steer torque and lateral force are shown in the top
-	two graphs. All of the signals were filtered with a 2nd order 15 hertz low
-	pass Butterworth filter and the means were subtracted. The remaining four
+	\caption{Example results for the identification of a single run.
+	Experimentally measured steer torque and lateral force are shown in the top
+	two graphs. All of the signals were filtered with a 2$^\textrm{nd}$ order 15
+	Hz low pass Butterworth filter and means were subtracted. The remaining four
 	graphs show the simulation results for the Whipple model (W), Whipple model
-	with the arm inertia (A), and the identified model for that run (I) plotted
-	with the measured data (M). The percentages give the percent of variance
-	explained by the model.}
+	with arm inertial effects (A), and the identified model (I) for that run
+	plotted with the measured data (M). The percentages give the percent of
+	variance explained by the model.}
 	\label{fig:exampleFit}
 \end{figure}
-
+%
 \section*{EXPERIMENTS}
 We collected data with three riders of similar age, stature, and proficiency in
 bicycling for a series of experiments. The data presented herein focuses on
 two tasks:
-
 \begin{description}
 	\item[Heading Tracking]
 		The rider was instructed to simply balance the bicycle and keep a
-		relatively straight heading while focusing their vision at a point in the
+		relatively constant heading while focusing their vision at a point in the
 		far distance.
 	\item[Lateral Deviation Tracking]
 		The rider was instructed to focus on a straight line that was marked on the
@@ -199,47 +199,45 @@ We performed the experiments on a treadmill and in a large gymnasium. The
 treadmill is 1 meter wide by 5 meters long and has a speed range from 0.5 m/s
 to 17 m/s. The treadmill was narrow but after some practice we were able to
 successfully perform the lateral perturbations experiments. This provided a
-very controlled environment, in particular with respect to fixed speeds and
-allowed for very long runs durations within a broad speed range. The gymnasium
-floor provided a rectangular wind free space of about 30 m by 55 m. We rode
+very controlled environment, in particular with respect to constant speeds, and
+allowed for very long run durations within a broad speed range. The gymnasium
+floor provided a rectangular wind-free space of about 30 m by 55 m. We rode
 around the perimeter to build up speed and did our maneuvers on a straight
 section about 30 m long. We were not able to travel at speeds higher than about
 7 m/s due to the tires slipping in the final turn into the test section.
-
+%
 \section*{FIRST PRINCIPLE MODELS}
-The passive dynamics of the bicycle-rider system can be described with many
-models. The benchmarked \cite{Meijaard2007,Basu-Mandal2007} Whipple model
+Passive dynamics of the bicycle-rider system can be described with many models.
+The benchmarked \cite{Meijaard2007,Basu-Mandal2007} Whipple model
 \cite{Whipple1899} provides a somewhat minimalistic model capable of capturing
-the essential dynamics of a bicycle-rider system. We use this model as the
-standard base model to work from, as the fidelity of simpler models are
-generally not adequate. The model is 4th order with roll angle, steer angle,
-roll rate and steer rate as the states and typically a roll torque and steer
-torque as the inputs. We neglect the roll torque input and in its place extend
-the model such that a lateral force acting at a point on the frame provides a
-new input, to accurately model the lateral perturbations. The second model that
-we consider adds the inertial effects of the rider's arms because during the
-experiments the riders were free to move their arms along with the front frame
-of the bicycle. This extension is similar in fashion to the upright rider in
-\cite{Schwab2012}, except with slightly different joint definitions.
-Constraints are then chosen such that no additional degrees of freedom are
-added keeping the system both tractable and comparable to the benchmarked
-Whipple model.
+the essential dynamics. We use this model as the standard base model, as the
+fidelity of simpler models are generally not adequate. The model is 4th order
+with roll angle, steer angle, roll rate and steer rate as states and typically
+roll and steer torque as inputs. We neglect roll torque input and in its place
+extend the model to include a lateral force acting at a point on the frame to
+provide a new input, accurately modelling lateral perturbations. A second model
+adds inertial effects of the rider's arms because during the experiments the
+riders were free to move their arms with the front frame of the bicycle. This
+model is similar in fashion to the upright rider in \cite{Schwab2012}, but with
+slightly different joint definitions.  Constraints are chosen so that no
+additional degrees of freedom are added, keeping the system both tractable and
+comparable to the benchmarked Whipple model.
 
-We populate the linear model coefficients using measured parameters of the
+We determine the linear model coefficients using measured parameters of the
 bicycle and rider. The bicycle was measured as described in \cite{Moore2010} to
 get accurate estimates of the parameters used in the benchmark bicycle.  Each
-rider's inertial properties were estimated with Yeadon's method
-\cite{Yeadon1990a} and allowed easy extraction of body segment parameters for
+rider's inertial properties were estimated using Yeadon's method
+\cite{Yeadon1990a} which allowed easy extraction of body segment parameters for
 more complicated rider biomechanic models such as the inclusion of moving arms
-as described above. The parameter computation is handled with a two custom open
+as described above. The parameter computation is handled with two custom open
 source software packages \cite{Moore2011a,Dembia2011}.
-
+%
 \section*{MODEL IDENTIFICATION}
 Each run provided a collection of time series that describe the various inputs
-and outputs of the system. For this analysis, we limit our inputs to steer
-torque and lateral force and our outputs to roll angle, steer angle, roll rate
-and steer rate. This ideal fourth order system can be described by the
-following continuous state space description
+and outputs of the system. For this analysis, we limit inputs to steer torque
+and lateral force and outputs to roll angle, steer angle, roll rate and steer
+rate. The ideal fourth order system is described with the following continuous
+state space description
 \begin{equation}
 	\begin{split}
 		\dot{x}(t) & =
@@ -281,14 +279,13 @@ following continuous state space description
 \end{equation}
 where $\mathbf{H}$ is the identity matrix.
 
-Assuming that this model structure can adequately capture the dynamics of
-interest in the bicycle/rider system, our goal is to accurately identify the
+Assuming that this model structure adequately captures the dynamics of
+interest of the bicycle-rider system, our goal is to accurately identify the
 unknown parameters $\theta$ which are made up of the unspecified entries in the
 $\mathbf{F}$ and $\mathbf{G}$ matrices. This continuous formulation is not
 compatible with noisy discrete data and the following difference equation can
-be assumed if we sample at $t=kT$, $k=1,2,\dots$ and that the values are
+be assumed if we sample at $t=kT$, $k=1,2,\dots$ and that the variables are
 constant over the sample period.
-
 \begin{equation}
 	\begin{split}
 		x(kT + T) & = \mathbf{A}(\theta)x(kT) + \mathbf{B}(\theta)u(kT) + w(kT)\\
@@ -296,85 +293,88 @@ constant over the sample period.
 	\end{split}
 \end{equation}
 
-The additional terms, $w$ and $v$ are the process noise and the measurement
-noise, respectively, which are assumed to be white and Gaussian with zero mean
-and known variance. In the analysis presented here, we assume the process
-noise, $w$, is zero.
+The additional terms $w$ and $v$ are the process and measurement noise,
+respectively, which are assumed to be white and Gaussian with zero mean and
+known variance. In the analysis presented here we assume the process noise $w$
+is zero.
 
 We made use of the Matlab System Identification Toolbox for the identification
 of the parameters $\theta$ in each run of this output error model structure.
 
-Figure \ref{fig:exampleFit} shows the example input and output data for a
+Figure \ref{fig:exampleFit} shows example input and output data for a
 single run with both steer torque and lateral force as inputs. Notice that the
-identified model predicts the trajectory extremely well and similar results are
+identified model predicts the trajectory extremely well. Similar results are
 found for the majority of the runs. The Whipple model predicts the trajectory
 directions but the magnitudes are too large, meaning that for a given
 trajectory, the Whipple model requires less torque than what was measured. The
 extended Whipple model with the arm inertial effects does a better job than the
 Whipple model, but still has some magnitude differences.
-
+%
 \section*{MODEL COMPARISON}
-We run the identification procedure described in the previous section for a
-collection of runs ($n=368$) over a range of speeds between about 1 and 9 m/s.
-Figure \ref{fig:coefficients} plots the identified coefficients of the
+We use the identification procedure described in the previous section for a
+collection of experiments ($n=368$) over a range of speeds between about 1 and
+9 m/s.  Figure \ref{fig:coefficients} plots identified coefficients of the
 dynamical equations of motion (i.e. the bottom two rows of the \(\mathbf{F}\)
-and \(\mathbf{G}\) matrices) as a function of speed for each run as compared to
-both the Whipple model prediction and the arm model prediction. From visual
-inspection the $\ddot{phi}$ equation seems to be better predicted by the two
-models. The roll equation also seems to have less spread in the experimental data. For
-example, the \(a_{\ddot{\phi}\delta}\) coefficient appears to be very tight and the
-first principles models predict it very well. The constant, linear and
-quadratic trends in the coefficients are not easily seen for most coefficients
-due to the variability in the high number of repeated experiments at some speeds.
+and \(\mathbf{G}\) matrices) as a function of speed for each experiment
+compared to both the Whipple and arm model predictions. From visual inspection
+the $\ddot{\phi}$ equation seems to be better predicted by the two models. The
+roll equation also seems to have less spread in the experimental data. For
+example, the \(a_{\ddot{\phi}\delta}\) coefficient appears to be very tight and
+the first principles models predict it very well. The constant, linear and
+quadratic trends in the coefficients are not easily seen for most coefficients.
+This is due to the high variability in the results of a large number of
+repeated experiments at some speeds, more detailed regression models may be
+able to reveal the true trends.
 
 Figure \ref{fig:bode} gives another view of the resulting data. It is a
 frequency response plot at the mean speed for a set of runs. The blue lines
 give the mean and standard deviation of the magnitude and phase of the system
-transfer function \(\frac{\phi}{T_\delta}(s)\). Even though the spread in
-the identified parameters seems high in Figure \ref{fig:coefficients}, the Bode
-plot shows that the system response is not as variable, especially in magnitude.
-It is also apparent that the experimental magnitude has a -5 to -10 dB offset
-across the frequency range shown with respect to the Whipple model. This
-correlates with the amplitude differences in the trajectories shown in
-\ref{fig:exampleFit}. Notice that the arm model has little to no offset between
-2 and 10 rad/s, thus the better amplitude matching.
-
+transfer function \(\frac{\phi}{T_\delta}(s)\). Even though the spread in the
+identified parameters seems high in Figure \ref{fig:coefficients}, the Bode
+plot shows that the identified system response is not as variable, especially
+in magnitude.  It is also apparent that the experimental magnitude has a -5 to
+-10 dB offset across the frequency range shown with respect to the Whipple
+model. This correlates with the amplitude differences in the trajectories shown
+in Fig. \ref{fig:exampleFit}. Notice that the arm model has little to no offset
+between 2 and 10 rad/s, thus the better amplitude matching.
+%
 \begin{figure*}
 	\includegraphics{figures/coefficients.pdf}
-	\caption{The coefficients of the linear dynamical equations of motion plotted
+	\caption{Coefficients of the linear dynamical equations of motion plotted
 	as a function of speed. Each blue dot is a single experiment. The green line
 	is the Whipple model and the red line is the arm model. Only experiments
 	with a mean fit percentage greater than zero are shown.}
 	\label{fig:coefficients}
 \end{figure*}
-
+%
 \begin{figure}
 	\includegraphics{figures/bode.pdf}
-	\caption{The frequency response of the steer torque to roll angle transfer
-	function for a set of runs at $4.0 \pm 0.3$ m/s. The solid blue line is the
-	mean from the identified runs and is bounded by the standard deviation, the
-	dotted blue line. The green line is the Whipple model and the red line is the
-	from the arm extension.}
+	\caption{Frequency response of steer torque to roll angle for a set of runs
+	at $4.0 \pm 0.3$ m/s. The solid blue line is the mean from the identified
+	runs and is bounded by the standard deviation, the dotted blue line. The
+	green line is the Whipple model and the red line is for the model which
+	accounted for the arm inertial effects.}
 	\label{fig:bode}
 \end{figure}
-
+%
 \section*{CONCLUSION}
 We have shown that a fourth order structured state space model is adequate for
 describing the motion of the bicycle under manual control in a speed range from
-approximately 1.5 m/s to 9 m/s. The fact that higher order models may not be
-necessary for bicycle dynamic description is an important finding, but the
-data subsequently reveals that archetypal first principles models are not
-robust enough to fully describe the dynamics. The deficiencies are most
-probably due to the knife edge, no side slip assumptions made in the two
-models. The uncertainty in our first principle model physical parameter estimates
-is not likely large enough to cause the them to better predict the data. It is
-more likely that a tire scrub torques of some sort are needed to improve the
-fidelity. Future work will focus on identifying the process noise for better
-parameter estimation, fitting regression models to the coefficient data, and
-adding simple tire scrub torque extensions to the first principle model.
+approximately 1.5 m/s to 8 m/s. The fact that higher order models may not be
+necessary for bicycle dynamic description is an important finding, but the data
+subsequently reveals that archetypal first principles models are not robust
+enough to fully describe the dynamics. The deficiencies are most probably due
+to the knife edge, no side slip wheel contact assumptions made in the two
+models. The uncertainty in the estimates of the physical parameters is not
+large enough to explain the difference between the coefficient identification
+and their predictions from first principles. It is likely that tire scrub
+torques of some sort are needed to improve the fidelity. Future work will
+focus on identifying the process noise for better parameter estimation, fitting
+regression models to the coefficient data, and adding simple tire scrub torque
+extensions to the first principles model.
 
 \begin{acknowledgment}
-	This material is based upon work supported by the National Science Foundation
+	This paper is based on work supported by the National Science Foundation
 	under Grant No 0928339.
 \end{acknowledgment}
 
