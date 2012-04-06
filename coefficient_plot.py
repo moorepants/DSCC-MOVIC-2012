@@ -31,21 +31,17 @@ models = {rider: model.Whipple(rider).matrices(speedRange) for rider in ['Charli
 
 coefPlot.update_graph(subDat, models)
 
-# now add the whipple model
-m = loadmat('armsAB.mat', squeeze_me=True) # this is charlie at 11 speeds
+# now add the arm model
+m = loadmat('armsAB-Charlie.mat', squeeze_me=True) # this is charlie at 101 speeds
 
-stateMats = zeros((11, 4, 4))
-for i, A in enumerate(m['stateMatrices']):
-    stateMats[i] = A[[3, 6, 16, 18], :][:, [3, 6, 16, 18]]
-
-inputMats = zeros((11, 4, 2))
+inputMats = zeros((101, 4, 1))
 for i, B in enumerate(m['inputMatrices']):
-    inputMats[i] = B[[3, 6, 16, 18], 2:4]
+    inputMats[i] = B[:, 1].reshape(4, 1)
 
 for lab, ax in coefPlot.axes.items():
     row, col = int(lab[-2]), int(lab[-1])
     if lab[0] == 'a':
-        ax.plot(m['speed'], stateMats[:, row - 1, col - 1], 'r')
+        ax.plot(m['speed'], m['stateMatrices'][:, row - 1, col - 1], 'r')
     elif lab[0] == 'b':
         ax.plot(m['speed'], inputMats[:, row - 1, col - 1], 'r')
 
