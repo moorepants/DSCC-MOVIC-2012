@@ -34,16 +34,11 @@ bodePlot.bode.figs[0].axes[0].lines[3].set_color('g')
 bodePlot.bode.figs[0].axes[1].lines[3].set_color('g')
 
 # arm model at the mean speed for this run
+m = loadmat('armsAB-Charlie.mat', squeeze_me=True) # this is charlie at 101 speeds
 
-A = array([[0.0, 0.0, 1.0, 0.0],
-           [0.0, 0.0, 0.0, 1.0],
-           [8.4999, -12.2999, -0.0393, -1.1386],
-           [7.1271,  0.3462, 2.5343, -7.3279]])
-
-B = array([[0.0],
-           [0.0],
-           [-0.0314],
-           [2.0233]])
+# @ 4.0 m/s
+A = m['stateMatrices'][40]
+B = m['inputMatrices'][40, :, 1]
 C = array([[1.0, 0.0, 0.0, 0.0]])
 D = zeros((1, 1))
 sys = control.StateSpace(A, B, C, D)

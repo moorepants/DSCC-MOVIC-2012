@@ -1,26 +1,22 @@
 PATH_TO_BICYCLE_SYSTEM_ID = '/media/Data/Documents/School/UC Davis/Bicycle Mechanics/BicycleSystemID';
-addpath(PATH_TO_BICYCLE_SYSTEM_ID)
-dataDir = [PATH_TO_BICYCLE_SYSTEM_ID filesep 'scripts' filesep 'exports'];
+addpath([PATH_TO_BICYCLE_SYSTEM_ID '/src/matlab'])
+dataDir = [PATH_TO_BICYCLE_SYSTEM_ID filesep 'scripts' filesep 'statespaceid' filesep 'exports'];
 
 inputs = {'tDelta', 'fB'};
 states = {'phi', 'delta', 'phiDot', 'deltaDot'};
 outputs = {'phi', 'delta', 'phiDot', 'deltaDot'};
 
-[data, v, rider] = build_id_data('00588.mat', outputs, inputs, ...
+runID = '00596';
+[data, v, rider] = build_id_data([runID '.mat'], outputs, inputs, ...
     dataDir, true);
 
 whippleModel = bicycle_structured(['Rigid' rider], v, 'states', states, ...
     'inputs', inputs, 'outputs', outputs);
 
 armModel = whippleModel;
-armModel.A = [0, 0, 1, 0
-              0, 0, 0, 1
-              8.4999, -3.1591, -0.0199, -0.5753
-              7.1271, 9.7078, 1.2806, -3.7027];
-armModel.B = [0, 0
-              0, 0
-              -0.0314, 0.0072
-               2.0233, -0.0056];
+load('armsAB-Charlie.mat')
+armModel.A = squeeze(stateMatrices(round(v * 10) + 1, :, :));
+armModel.B = squeeze(inputMatrices(round(v * 10) + 1, :, [2, 3]));
 
 pemArgs = {'Maxiter', 100, ...
            'SearchMethod', 'auto', ...
@@ -50,18 +46,24 @@ set(gcf, ...
     'PaperPosition', [0, 0, figWidth, figHeight], ...
     'PaperSize', [figWidth, figHeight])
 
-axesHandles = tight_subplot(6, 1, [0.05, 0.0], [0.1, 0.01], [0.17, 0.05]);
+leftMargin = 0.16;
+% [gapHeight, gapWidth], [lowerMargin, upperMargin], [leftMargin, rigthMargin]
+axesHandles = tight_subplot(6, 1, [0.05, 0.0], [0.1, 0.05], [0.17, leftMargin]);
 
+% steer torque
 ax = axesHandles(1);
+% TODO: this title doesn't seem to want to show up
+title(ax, sprintf('Run # %s at %1.1f m/s', runID, v))
 lh = plot(ax, time, data.InputData(:, 1), 'k');
 ylabel(ax, '\(T_\delta\) [N-m]', 'Interpreter', 'Latex')
-xlim(ax, [0, 12])
+xlim(ax, [0, 7])
 %set(ax, 'XTick', [])
 
 ax = axesHandles(2);
 lh = plot(ax, time, data.InputData(:, 2), 'k');
 ylabel(ax, '\(F_{c_l}\) [N]', 'Interpreter', 'Latex')
-xlim(ax, [0, 12])
+ylim(ax, [-250, 250])
+xlim(ax, [0, 7])
 %set(ax, 'XTick', [])
 
 ylabels = {'\(\phi\) [rad]', '\(\delta\) [rad]',
@@ -76,13 +78,10 @@ for i = 1:4
               time, YH{2}.OutputData(:, i), 'g', ...
               time, YH{3}.OutputData(:, i), 'r');
     ylabel(ax, ylabels{i}, 'Interpreter', 'Latex')
-    idLeg = sprintf('I %1.0f%%', f(1, i));
-    whipLeg = sprintf('W %1.0f%%', f(2, i));
-    armLeg = sprintf('A %1.0f%%', f(3, i));
+    idLeg = sprintf('I (%1.0f%%)', f(1, i));
+    whipLeg = sprintf('W (%1.0f%%)', f(2, i));
+    armLeg = sprintf('A (%1.0f%%)', f(3, i));
     leg = legend(ax, 'M', idLeg, whipLeg, armLeg);
-    %pos = get(leg, 'Position');
-    %set(leg, 'Position', pos + [0, 0, 0, 0])
-    set(leg, 'FontSize', 5)
     % I can't figure out how to change the legend line length!! the
     % following doesn't seem to work
     legLines = findobj(leg, 'type', 'line');
@@ -90,7 +89,17 @@ for i = 1:4
         lim = get(legLines(i), 'XData');
         set(legLines(i), 'XData', [lim(1), lim(2) / 3])
     end
-    xlim(ax, [0, 12])
+    set(leg, 'FontSize', 4)
+    % TODO: I can't figure out how to tell the legend box to go exactly
+    % where I want it to. It seems to be resized depending on what font size
+    % is in the box and the space for the lines.
+    axPos = get(ax, 'Position')
+    pos = get(leg, 'Position')
+    % left, bottom, width, height
+    set(leg, 'OuterPosition',[0.86, axPos(2) + 0.05,  0.05, 0.01])
+    get(leg)
+
+    xlim(ax, [0, 7])
     %if i ~= 4
         %set(ax, 'XTick', [])
     %end
